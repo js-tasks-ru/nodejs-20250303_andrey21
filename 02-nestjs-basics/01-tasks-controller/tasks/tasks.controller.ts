@@ -27,7 +27,11 @@ export class TasksController {
 
   @Patch(":id")
   updateTask(@Param("id") id: string, @Body() task: Task) {
-    return this.tasksService.updateTask(id, task);
+    const taskToPatch = this.tasksService.updateTask(id, task);
+    if (!taskToPatch) {
+      throw new NotFoundException('404');
+    }
+    return taskToPatch;
   }
 
   @Delete(":id")
