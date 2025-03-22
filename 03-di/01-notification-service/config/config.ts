@@ -1,3 +1,3 @@
 export default () => ({
-  LANG: process.env.LANG || 'en',
+  LANG: process.env.LANG || 'ru',
 })

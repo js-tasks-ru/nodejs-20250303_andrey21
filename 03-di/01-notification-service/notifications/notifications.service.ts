@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger } from "@nestjs/common";
+import { Injectable, Logger, BadRequestException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 
@@ -9,11 +9,11 @@ export class NotificationsService {
 
   async sendEmail(to: string, subject: string, message: string): Promise<void> {
     if (!to) {
-      throw new NotFoundException('400 Bad Request');
+      throw new BadRequestException('400 Bad Request');
     }
     const lang = this.configService.get<string>('LANG');
     let emailText: string;
-    if (lang === 'en') {
+    if (lang === 'ru') {
      emailText = `Email sent to ${to}: [${subject}] ${message}`;
     } else {
       emailText = message;
@@ -24,11 +24,11 @@ export class NotificationsService {
 
   async sendSMS(to: string, message: string): Promise<void> {
     if (!to) {
-      throw new NotFoundException('400 Bad Request');
+      throw new BadRequestException('400 Bad Request');
     }
     const lang = this.configService.get<string>('LANG');
     let smsText: string;
-    if (lang === 'en') {
+    if (lang === 'ru') {
       smsText = `SMS sent to ${to}: Статус задачи ${message} обновлён на "completed"`;
     } else {
       smsText = message;
