@@ -5,6 +5,7 @@ import {
   HttpException,
 } from "@nestjs/common";
 import { Response } from "express";
+import * as fs from "fs";
 
 @Catch(HttpException)
 export class HttpErrorFilter implements ExceptionFilter {
@@ -13,10 +14,14 @@ export class HttpErrorFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
-    response.status(status).json({
+    const errorResponse = {
       statusCode: status,
       message: exception.message,
       timestamp: new Date().toISOString(),
-    });
+    };
+
+    fs.appendFileSync("errors.log", `[${errorResponse.timestamp}] ${status} - ${errorResponse.message}`);
+
+    response.status(status).json(errorResponse);
   }
 }
